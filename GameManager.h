@@ -10,7 +10,7 @@
 using namespace std;
 
 class GameManager {
-private:
+public:
     //Index 0 = ผู้เล่น, Index 1 = บอท
     int LP[2]; 
     vector<Card> deck[2];
@@ -57,7 +57,7 @@ public:
         announceWinner();
     }
 
-private:
+public:
     void drawCard(int playerIndex, int amount = 1) {
         for (int i = 0; i < amount; i++) {
             // 1. Deck Out = แพ้ทันทีถ้าไม่มีการ์ดให้จั่ว
@@ -233,6 +233,7 @@ private:
 
                     if (posChoice == 1 && selectedCard.type == "Spell" && spellTrapZone[0].size() < 5) {
                         cout << "\n>> \033[0;32mYou Activated Spell Card: '" << selectedCard.name << "'!\033[0m\n";
+                        selectedCard.spellEffect(this, 0);//เพิ่มเติมสำหรับใช้เวทย์
                         spellTrapZone[0].push_back(selectedCard); 
                         hand[0].erase(hand[0].begin() + cardIndex);
                     } 
@@ -304,6 +305,19 @@ private:
                 // 2. เลือกว่าจะตีใคร
                 if (monsterZone[1].empty()) {
                     // --- กรณี DIRECT ATTACK ---
+
+                    bool trapActivated = false; //แทรกกับดัก
+                    for (int t = 0; t < spellTrapZone[1].size(); t++) {
+                        if (spellTrapZone[1][t].type == "Trap") {
+                            cout << "\n\033[0;31m[!] BOT ACTIVATED A TRAP CARD: " << spellTrapZone[1][t].name << "!\033[0m\n";
+                            spellTrapZone[1][t].spellEffect(this, 1); // 1 คือบอทเป็นคนใช้
+                            graveyard[1].push_back(spellTrapZone[1][t]);
+                            spellTrapZone[1].erase(spellTrapZone[1].begin() + t);
+                            trapActivated = true; break;
+                        }
+                    }
+                    if (trapActivated) continue; // ข้ามดาเมจ
+
                     cout << "\n>> \033[38;5;94m" << attacker.name << "\033[0m attacks Bot directly!!!\n";
                     LP[1] -= attacker.atk;
                     cout << "\033[31mBot takes " << attacker.atk << " damage!\033[0m (Bot LP: " << LP[1] << ")\n";
@@ -330,6 +344,18 @@ private:
                         int tIndex = targetChoice - 1;
                         Card target = monsterZone[1][tIndex];
                         hasAttacked[aIndex] = true; // ยืนยันการตี
+
+                        bool trapActivated = false; //แทรกกับดัก
+                        for (int t = 0; t < spellTrapZone[1].size(); t++) {
+                            if (spellTrapZone[1][t].type == "Trap") {
+                                cout << "\n\033[0;31m[!] BOT ACTIVATED A TRAP CARD: " << spellTrapZone[1][t].name << "!\033[0m\n";
+                                spellTrapZone[1][t].spellEffect(this, 1); // 1 คือบอทเป็นคนใช้
+                                graveyard[1].push_back(spellTrapZone[1][t]);
+                                spellTrapZone[1].erase(spellTrapZone[1].begin() + t);
+                                trapActivated = true; break;
+                            }
+                        }
+                        if (trapActivated) continue; // ข้ามดาเมจ
 
                         cout << "\n>> \033[38;5;94m" << attacker.name << "\033[0m attacks ";
                         if (target.status == 1) cout << "\033[38;5;94m" << target.name << "\033[0m!\n";
@@ -452,6 +478,7 @@ private:
                 // เวทมนตร์ มีโอกาส 60% ที่จะใช้งานเลย
                 else if (selectedCard.type == "Spell") {
                     cout << ">> \033[0;32mBot Activates Spell Card: '" << selectedCard.name << "'!\033[0m\n";
+                    selectedCard.spellEffect(this, 1);//เพิ่มเติมสำหรับใช้เวทย์
                     spellTrapZone[1].push_back(selectedCard);
                     hand[1].erase(hand[1].begin() + i);
                 }
@@ -492,8 +519,29 @@ private:
                 
                 if (roll < botCourage) {
                     cout << ">> Bot's \033[38;5;94m" << monsterZone[1][i].name << "\033[0m declares an ATTACK!\n";
+
+                    bool trapActivated = false; // ตัวแปรจำว่ามีกับดักทำงานไหม
+        
+                    // เช็คโซนเวท/กับดักของเรา (Index 0) ว่ามีการ์ดหมอบอยู่ไหม
+                     for (int t = 0; t < spellTrapZone[0].size(); t++) {
+            
+                    // ถ้าการ์ดใบนั้นคือ "Trap" ใช้
+                        if (spellTrapZone[0][t].type == "Trap") {
+                        spellTrapZone[0][t].spellEffect(this, 0); 
+                
+                        // กับดักใช้เสร็จแล้ว ต้องย้ายลงสุสาน
+                        graveyard[0].push_back(spellTrapZone[0][t]);
+                        spellTrapZone[0].erase(spellTrapZone[0].begin() + t);
+                        trapActivated = true; // บันทึกว่ากับดักทำงานสำเร็จแล้ว
+                        break; // เลิกลูป ให้กับดักทำงานแค่ใบเดียวพอ
+            }
+        }
+                    if (trapActivated) 
+            // ถ้ากับดักอย่าง Mirror Force ทำงาน มอนสเตอร์บอทจะถูกทำลายไปแล้ว
+            // การโจมตีครั้งนี้จึงต้อง "ถูกยกเลิก" 
+                    continue;
                     // TODO: ระบบคำนวณดาเมจตรงนี้
-                } else {
+                    }else {
                     cout << ">> Bot hesitates... \033[38;5;94m" << monsterZone[1][i].name << "\033[0m cancels its attack out of fear!\n";
                 }
             }
