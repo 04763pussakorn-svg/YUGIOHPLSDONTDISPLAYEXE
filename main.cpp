@@ -40,7 +40,7 @@ int main() {
         Card("Beaver Warrior", "Monster", 4, 1200, 1500, "\"A beaver that is skilled in combat.\""),
         Card("Celtic Guardian", "Monster", 4, 1400, 1200, "\"An elf who learned to wield a sword, he baffles enemies with lightning-swift attacks.\""),
         Card("Curse of Dragon", "Monster", 5, 2000, 1500, "\"A wicked dragon that taps into dark forces.\""),
-        Card("Dark Magician", "Monster", 7, 2500, 2100, "\"The ultimate wizard in terms of attack and defense. \""),
+        Card("Dark Magician", "Monster", 7, 2500, 2100, "\"The ultimate wizard in terms of attack and defense.\""),
         Card("Feral Imp", "Monster", 4, 1300, 1400, "\"A playful little fiend that lurks in the dark.\""),
         Card("Gaia The Fierce Knight", "Monster", 7, 2300, 2100, "\"A knight whose horse travels faster than wind.\""),
         Card("Giant Soldier of Stone", "Monster", 3, 1300, 2000, "\"A giant warrior made of stone. \""),

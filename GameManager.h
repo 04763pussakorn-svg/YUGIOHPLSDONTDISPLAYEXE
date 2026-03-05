@@ -169,7 +169,7 @@ private:
         if (playerIndex == 0) cout << "\n--- Player 1's Turn --- (Turn " << turnCount << ")\n";
         else cout << "\n--- Bot's Turn --- (Turn " << turnCount << ")\n";
 
-        drawPhase(playerIndex);
+        if(turnCount >= 2) drawPhase(playerIndex);
         
         if (playerIndex == 0) {
             // ฟังก์ชันรับคำสั่งจากผู้เล่นพิมพ์คีย์บอร์ด
@@ -250,8 +250,13 @@ private:
                     }
 
                 } 
+                else if (selectedCard.type == "Monster" && hasSummoned) {
+                    cout << "\033[31m[!] You have already Normal Summoned a monster this turn! You can only Cancel.\033[0m\n";
+                    cout << "[0] Cancel\n";
+                }
+
                 // --- กรณีเป็นการ์ดเวทมนตร์หรือกับดัก ---
-                else {
+                else if (selectedCard.type == "Spell" || selectedCard.type == "Trap") {
                     cout << "\nWhat would you like to do with this card?\n";
                     if (spellTrapZone[0].size() >= 5) {
                         cout << "\033[31m[!] Your Spell/Trap Zone is full! You can only Cancel.\033[0m\n";
