@@ -509,7 +509,7 @@ private:
 
     void botBattlePhase() {
         cout << "\n[ Phase: BOT BATTLE PHASE ]\n";
-        
+        displayBoard();
         bool canAttack = false;
         for (Card c : monsterZone[1]) {
             if (c.status == 1) canAttack = true; 
