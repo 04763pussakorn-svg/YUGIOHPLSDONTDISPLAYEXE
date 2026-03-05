@@ -171,12 +171,19 @@ void render_card(){
 void Put_Card(int x ,int y ,int Type, int Color,int id, char owner){
     Card_info &card = (owner == 'E') ? E[id] : P[id];
     
+    if(Type == 1){ // หงายหน้าโจมตี หรือ หงายการ์ดเวทย์
+        create_linex(x+2,y,4,Color);
+        create_linex(x+2,y+3,4,Color);
+        create_liney(x+1,y+1,3,Color);
+        create_liney(x+6,y+1,3,Color);
+        if(card.type == "Monster") drawText(x+2, y+4, card.atk, 0); // โชว์ ATK
+    }
     else if(Type == 2){ // คว่ำหน้าป้องกัน หรือ เซ็ตการ์ด
         create_linex(x,y+1,7,Color);
         create_linex(x,y+3,7,Color);
         create_liney(x-1,y+2,2,Color);
         create_liney(x+7,y+2,2,Color);
-      
+        
         if (owner == 'P' && card.type == "Monster") {
             drawText(x+2, y+4, card.def, 0); // โชว์ DEF มอนสเตอร์ฝั่งตัวเอง
         } else if (card.type == "Monster") {
