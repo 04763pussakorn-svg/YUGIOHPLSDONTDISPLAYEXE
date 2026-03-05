@@ -9,7 +9,7 @@
 #include <random>    
 #include <ctime>
 using namespace std;
-#include "Draw.h"
+#include "Show.h"
 
 class GameManager {
 public:
@@ -250,7 +250,7 @@ private:
                         cout << "\n>> \033[0;32mYou Activated Spell Card: '" << selectedCard.name << "'!\033[0m\n";
                         selectedCard.status = 1;
                         selectedCard.spellEffect(this, 0);
-                        spellTrapZone[0].push_back(selectedCard); 
+                        graveyard[0].push_back(selectedCard);
                         hand[0].erase(hand[0].begin() + cardIndex);
                     } 
                     else if (posChoice == 2 && spellTrapZone[0].size() < 5) {
@@ -438,7 +438,7 @@ private:
                     cout << ">> \033[0;32mBot Activates Spell Card: '" << selectedCard.name << "'!\033[0m\n";
                     selectedCard.status = 1;
                     selectedCard.spellEffect(this, 1);
-                    spellTrapZone[1].push_back(selectedCard);
+                    graveyard[1].push_back(selectedCard);
                     hand[1].erase(hand[1].begin() + i);
                 }
             }
