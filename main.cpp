@@ -55,6 +55,7 @@ int main() {
     deck1.push_back(potOfGreed);
     deck1.push_back(mirrorForce);
 
+
     //Deck 2
     vector<Card> deck2 = {
         Card("Blue-Eyes White Dragon", "Monster", 8, 3000, 2500, "\"This legendary dragon is a powerful engine of destruction. Virtually invincible, very few have faced this awesome creature and lived to tell the tale.\""),
@@ -82,8 +83,6 @@ int main() {
         Card("Hyozanryu", "Monster", 7, 2100, 2800, "\"A dragon created from a massive diamond that sparkles with blinding light.\""),
         Card("Ryu-Kishin Powered", "Monster", 4, 1600, 1200, "\"A gargoyle enhanced by the powers of darkness. Very sharp talons make it a worthy opponent.\"")
     };
-    deck2.push_back(potOfGreed);
-    deck2.push_back(mirrorForce);
     deck2.push_back(potOfGreed);
     deck2.push_back(mirrorForce);
 
