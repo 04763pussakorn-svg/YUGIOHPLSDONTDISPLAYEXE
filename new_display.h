@@ -10,7 +10,6 @@
 
 using namespace std;
  
-// ANSI codes
 const string GRAY = "\033[30m";  
 const string RED = "\033[31m";   
 const string GREEN = "\033[32m"; 
@@ -83,7 +82,6 @@ inline void CopyCardInfo(Card_info & A, const Card& B){
     A.power = B.power;
 }
 
-// ฟังก์ชันหลักสำหรับอัปเดตหน้าจอโดยรับค่าตรงจาก GameManager
 inline void RenderBoard(int pLP, int eLP, 
                  const vector<Card>& pMon, const vector<Card>& pST, 
                  const vector<Card>& eMon, const vector<Card>& eST) {
@@ -146,7 +144,7 @@ void updateScreen(){
 }
 
 void render_card(){
-    // วาดการ์ดของ Bot (E)
+    //Bot (E)
     for(int i = 0 ; i < 2 ; i++){
         for(int j = 0 ; j < 5 ; j++){
             int id = i*5 + j;
@@ -156,7 +154,7 @@ void render_card(){
             }
         }
     }
-    // วาดการ์ดของ Player (P)
+    //Player (P)
     for(int i = 0 ; i < 2 ; i++){
         for(int j = 0 ; j < 5 ; j++){
             int id = i*5 + j;
@@ -171,32 +169,31 @@ void render_card(){
 inline void Put_Card(int x ,int y ,int Type, int Color,int id, char owner){
     Card_info &card = (owner == 'E') ? E[id] : P[id];
     
-    if(Type == 1){ // หงายหน้าโจมตี หรือ หงายการ์ดเวทย์ (แนวตั้ง)
+    if(Type == 1){
         create_linex(x+2,y,4,Color);
         create_linex(x+2,y+3,4,Color);
         create_liney(x+1,y+1,3,Color);
         create_liney(x+6,y+1,3,Color);
-        if(card.type == "Monster") drawText(x+2, y+4, card.atk, 0); // โชว์ ATK
+        if(card.type == "Monster") drawText(x+2, y+4, card.atk, 0); 
     }
-    else if(Type == 2){ // คว่ำหน้าป้องกัน หรือ เซ็ตการ์ด
+    else if(Type == 2){ 
         if (card.type == "Monster") {
-            // มอนสเตอร์หมอบป้องกัน (วาดแนวนอน)
+    
             create_linex(x,y+1,7,Color);
             create_linex(x,y+3,7,Color);
             create_liney(x-1,y+2,2,Color);
             create_liney(x+7,y+2,2,Color);
             if (owner == 'P') {
-                drawText(x+2, y+4, card.def, 0); // โชว์ DEF ให้ฝั่งตัวเองเห็น
+                drawText(x+2, y+4, card.def, 0); 
             } else {
-                drawText(x+2, y+4, "DEF", 0); // ซ่อนสเตตัสถ้าเป็นมอนสเตอร์บอท
+                drawText(x+2, y+4, "DEF", 0); 
             }
         } else {
-            // เวทมนตร์/กับดักหมอบ (วาดแนวตั้ง)
             create_linex(x+2,y,4,Color);
             create_linex(x+2,y+3,4,Color);
             create_liney(x+1,y+1,3,Color);
             create_liney(x+6,y+1,3,Color);
-            drawText(x+2, y+4, "SET", 0); // โชว์คำว่า SET ไว้ใต้การ์ด
+            drawText(x+2, y+4, "SET", 0); 
         }
     }
 }
@@ -210,9 +207,9 @@ void Details(){
 
 int hp_color(char A){
     int hp = (A == 'E') ? enermyhp : playerhp;
-    if(hp > 1500) return 3; // เขียว
-    else if(hp > 1000) return 0; // ขาว
-    else if(hp > 500) return 4; // เหลือง
+    if(hp > 3000) return 3; // เขียว
+    else if(hp > 2000) return 0; // ขาว
+    else if(hp > 1000) return 4; // เหลือง
     else return 2; // แดง
 }
 

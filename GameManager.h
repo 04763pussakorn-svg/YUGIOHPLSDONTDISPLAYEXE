@@ -171,10 +171,9 @@ private:
 
     void playerMainPhase() {
         bool endPhase = false;
-        bool hasSummoned = false; // เช็คว่าเทิร์นนี้ลงมอนสเตอร์ไปหรือยัง
+        bool hasSummoned = false; 
         while (!endPhase) {
             
-            // เรียกกราฟิกให้แสดงกระดานล่าสุด
             displayBoard();
             
             cout << "\n[ Phase: MAIN PHASE 1 ]\n";
@@ -197,7 +196,7 @@ private:
                 Card selectedCard = hand[0][cardIndex];
                 selectedCard.show(); 
 
-                // --- กรณีเลือกลงมอนสเตอร์ ---
+                //เลือกลงมอนสเตอร์ 
                 if (selectedCard.type == "Monster" && !hasSummoned) {
                     cout << "\nWhat would you like to do with this monster?\n";
                     if (monsterZone[0].size() >= 5) {
@@ -216,7 +215,7 @@ private:
                     cin >> posChoice;
 
                     if (posChoice == 1 || posChoice == 2) {
-                        // ---- ระบบสังเวยมอนสเตอร์ (Tribute Summon) ----
+                        //ระบบสังเวยมอนสเตอร์
                         int reqTribute = 0;
                         if (selectedCard.stars == 5 || selectedCard.stars == 6) reqTribute = 1;
                         else if (selectedCard.stars >= 7) reqTribute = 2;
@@ -224,8 +223,7 @@ private:
                         if (reqTribute > 0) {
                             if (monsterZone[0].size() < reqTribute) {
                                 cout << "\033[31m[!] You don't have enough monsters to tribute! (Requires " << reqTribute << ")\033[0m\n";
-                                continue; // มอนสเตอร์บนสนามไม่พอ ให้ข้ามไปเลือกไพ่ใบอื่น
-                            }
+                                continue; 
                             
                             cout << "\n\033[33m>> Level " << selectedCard.stars << " monster requires " << reqTribute << " tribute(s).\033[0m\n";
                             for (int t = 0; t < reqTribute; t++) {
@@ -247,8 +245,7 @@ private:
                                 cout << ">> \033[31mMonster tributed!\033[0m\n";
                             }
                         }
-                        // ---------------------------------------------
-
+                        
                         selectedCard.status = posChoice; 
                         monsterZone[0].push_back(selectedCard); 
                         hand[0].erase(hand[0].begin() + cardIndex); 
@@ -264,7 +261,7 @@ private:
                     int cancelChoice; cout << "[0] Cancel\nChoice: "; cin >> cancelChoice;
                 }
 
-                // --- กรณีเลือกใช้เวทมนตร์ หรือ กับดัก ---
+                //เลือกใช้เวทมนตร์กับดัก 
                 else if (selectedCard.type == "Spell" || selectedCard.type == "Trap") {
                     cout << "\nWhat would you like to do with this card?\n";
                     if (spellTrapZone[0].size() >= 5) {
@@ -289,7 +286,7 @@ private:
                         cout << "\n>> \033[0;32mYou Activated Spell Card: '" << selectedCard.name << "'!\033[0m\n";
                         selectedCard.status = 1;
                         selectedCard.spellEffect(this, 0);
-                        graveyard[0].push_back(selectedCard); // <--- แก้ไขให้เวทมนตร์ใช้แล้วลงสุสาน
+                        graveyard[0].push_back(selectedCard); 
                         hand[0].erase(hand[0].begin() + cardIndex);
                     } 
                     else if (posChoice == 2) {
@@ -444,33 +441,32 @@ private:
         
         bool hasSummoned = false; 
 
-        // บอทเช็คการ์ดในมือจากหลังมาหน้า
+        //บอทเช็คการ์ดในมือ
         for (int i = hand[1].size() - 1; i >= 0; i--) {
             Card selectedCard = hand[1][i];
             
-            // --- AI บอทลงมอนสเตอร์ ---
+            //บอทลงมอน
             if (selectedCard.type == "Monster" && !hasSummoned && monsterZone[1].size() < 5) {
                 int hesitation = rand() % 100;
-                if (hesitation < 25) continue; // บอทลังเล แกล้งไม่ลงการ์ดใบนี้
+                if (hesitation < 25) continue; //บอทไม่ลงการ์ดใบนี้
 
-                // ---- ระบบสังเวยมอนสเตอร์ของบอท ----
+                //ระบบสังเวยมอนของบอท 
                 int reqTribute = 0;
                 if (selectedCard.stars == 5 || selectedCard.stars == 6) reqTribute = 1;
                 else if (selectedCard.stars >= 7) reqTribute = 2;
 
                 if (reqTribute > 0) {
                     if (monsterZone[1].size() < reqTribute) {
-                        continue; // บอทมีมอนสเตอร์ไม่พอสังเวย ข้ามไพ่ใบนี้ไปเลย
+                        continue; //บอทมีมอนไม่พอสังเวย
                     }
                     
                     cout << "\n>> \033[33mBot tributes " << reqTribute << " monster(s)!\033[0m\n";
                     for (int t = 0; t < reqTribute; t++) {
-                        // บอทสังเวยมอนสเตอร์ตัวแรกสุดบนสนามตัวเองเสมอ
+                        //บอทสังเวยมอนตัวแรกสุดบนสนามตัวเองเสมอ
                         graveyard[1].push_back(monsterZone[1][0]);
                         monsterZone[1].erase(monsterZone[1].begin());
                     }
                 }
-                // ------------------------------------------------
 
                 int playStyle = rand() % 100;
                 if (selectedCard.atk >= 1500 && playStyle < 80) {
@@ -486,11 +482,11 @@ private:
                 hand[1].erase(hand[1].begin() + i);
                 hasSummoned = true; 
             }
-            // --- AI บอทใช้เวท/กับดัก ---
+            //บอทใช้เวทกับดัก
             else if ((selectedCard.type == "Spell" || selectedCard.type == "Trap") && spellTrapZone[1].size() < 5) {
                 int r = rand() % 100;
                 if (selectedCard.type == "Trap" || r < 40) {
-                    selectedCard.status = 2; // หมอบการ์ด
+                    selectedCard.status = 2; 
                     spellTrapZone[1].push_back(selectedCard);
                     cout << ">> Bot Sets a card in the Spell/Trap Zone.\n";
                     hand[1].erase(hand[1].begin() + i);
@@ -499,7 +495,7 @@ private:
                     cout << ">> \033[0;32mBot Activates Spell Card: '" << selectedCard.name << "'!\033[0m\n";
                     selectedCard.status = 1;
                     selectedCard.spellEffect(this, 1);
-                    graveyard[1].push_back(selectedCard); // <--- แก้ไขให้เวทมนตร์บอทใช้แล้วลงสุสาน
+                    graveyard[1].push_back(selectedCard);
                     hand[1].erase(hand[1].begin() + i);
                 }
             }
