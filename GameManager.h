@@ -224,6 +224,7 @@ private:
                             if (monsterZone[0].size() < reqTribute) {
                                 cout << "\033[31m[!] You don't have enough monsters to tribute! (Requires " << reqTribute << ")\033[0m\n";
                                 continue; 
+                            } // <=== [แก้บั๊ก] เพิ่มปีกกาปิดตรงนี้ !!!
                             
                             cout << "\n\033[33m>> Level " << selectedCard.stars << " monster requires " << reqTribute << " tribute(s).\033[0m\n";
                             for (int t = 0; t < reqTribute; t++) {
@@ -285,7 +286,9 @@ private:
                     if (posChoice == 1 && selectedCard.type == "Spell") {
                         cout << "\n>> \033[0;32mYou Activated Spell Card: '" << selectedCard.name << "'!\033[0m\n";
                         selectedCard.status = 1;
-                        selectedCard.spellEffect(this, 0);
+                        if (selectedCard.spellEffect) {
+                            selectedCard.spellEffect(this, 0);
+                        }
                         graveyard[0].push_back(selectedCard); 
                         hand[0].erase(hand[0].begin() + cardIndex);
                     } 
@@ -301,8 +304,7 @@ private:
             }
         }
     }
-    }
-    
+
     void playerBattlePhase() {
         bool hasAttackableMonster = false;
         for (Card c : monsterZone[0]) {
