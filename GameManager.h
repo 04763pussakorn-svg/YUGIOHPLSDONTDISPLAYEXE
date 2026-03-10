@@ -301,7 +301,8 @@ private:
             }
         }
     }
-
+    }
+    
     void playerBattlePhase() {
         bool hasAttackableMonster = false;
         for (Card c : monsterZone[0]) {
@@ -433,6 +434,7 @@ private:
             if (LP[0] <= 0 || LP[1] <= 0) break; 
         }
     }
+
 
     void botMainPhase() {
         displayBoard();
