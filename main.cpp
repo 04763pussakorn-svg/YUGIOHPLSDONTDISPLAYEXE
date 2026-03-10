@@ -375,7 +375,7 @@ int main() {
         Card("Giant Soldier of Stone", "Monster", 3, 1300, 2000, "\"A giant warrior made of stone. \""),
         Card("Griffore", "Monster", 4, 1600, 1000, "\"This monster's tough hide deflects almost any attack.\""),
         Card("Giant Soldier of Stone", "Monster", 3, 1300, 2000, "\"A giant warrior made of stone. \""),
-    };
+    };//d
     deck1.push_back(potOfGreed);
     deck1.push_back(darkHole);
     deck1.push_back(heavyStorm);
@@ -434,15 +434,17 @@ int main() {
 
     GameManager game;
     int urDeck;
-    cout << "Select Your Deck!   <Bot will select the another Deck>\n[1] Yugi's Deck\n[2] Kaiba's Deck" << endl;
+    cout << "Select Your Deck!   <Bot will select the another Deck>\n[1] Dark Magician\n[2] Blue Eyes White Dragon" << endl;
     cin >> urDeck;
     if(urDeck == 1) {
-        cout << "You Selected Yugi's Deck!\n";
+        cout << "You Selected Dark Magician Deck!\n";
         game.setDecks(deck1, deck2);}
     else if(urDeck == 2) {
-        cout << "You Selected Kaiba's Deck!\n";
+        cout << "You Selected Blue Eyes White Dragon Deck!\n";
         game.setDecks(deck2, deck1);}
     
     game.startDuel();
+//Muhahaha
     return 0;
 }
+
