@@ -6,18 +6,14 @@ int main() {
     Card potOfGreed("Pot of Greed", "Spell", 0, 0, 0, "Draw 2 cards.");
     potOfGreed.spellEffect = [](GameManager* gm, int casterIndex) {
         cout << "\n\033[0;32m[EFFECT] " << (casterIndex == 0 ? "You draw" : "Bot draws") << " 2 cards!\033[0m\n";
-        gm->drawCard(casterIndex, 2); // สั่ง GameManager ให้ผู้เล่นจั่ว 2 ใบ
+        gm->drawCard(casterIndex, 2); 
     };
 
     Card darkHole("Dark Hole", "Spell", 0, 0, 0, "Destroy all monsters on the field.");
     darkHole.spellEffect = [](GameManager* gm, int casterIndex) {
         cout << "\n\033[0;32m[EFFECT] DARK HOLE! All monsters are sucked into the void and DESTROYED!\033[0m\n";
-
-        // กวาดมอนสเตอร์ฝั่งผู้เล่นลงสุสาน
         for(Card c : gm->monsterZone[0]) gm->graveyard[0].push_back(c);
         gm->monsterZone[0].clear();
-
-        // กวาดมอนสเตอร์ฝั่งบอทลงสุสาน
         for(Card c : gm->monsterZone[1]) gm->graveyard[1].push_back(c);
         gm->monsterZone[1].clear();
     };
@@ -25,12 +21,8 @@ int main() {
     Card heavyStorm("Heavy Storm", "Spell", 0, 0, 0, "Destroy all Spell and Trap cards on the field.");
     heavyStorm.spellEffect = [](GameManager* gm, int casterIndex) {
         cout << "\n\033[0;32m[EFFECT] HEAVY STORM! All Spells and Traps are blown away!\033[0m\n";
-
-        // กวาดเวท/กับดักฝั่งผู้เล่นลงสุสาน
         for(Card c : gm->spellTrapZone[0]) gm->graveyard[0].push_back(c);
         gm->spellTrapZone[0].clear();
-
-        // กวาดเวท/กับดักฝั่งบอทลงสุสาน
         for(Card c : gm->spellTrapZone[1]) gm->graveyard[1].push_back(c);
         gm->spellTrapZone[1].clear();
     };
@@ -43,16 +35,16 @@ int main() {
         }
 
         int targetIdx = 0;
-        if (casterIndex == 0) { // ถ้าเราเป็นคนร่าย
+        if (casterIndex == 0) { //ถ้าเราเป็นคนร่าย
             cout << "Select an opponent's Spell/Trap to destroy:\n";
             for (int i = 0; i < gm->spellTrapZone[oppIndex].size(); i++) {
-                // ถ้าหมอบอยู่จะไม่แสดงชื่อ
+                //ถ้าหมอบอยู่จะไม่แสดงชื่อ
                 string cName = (gm->spellTrapZone[oppIndex][i].status == 2) ? "Face-down Card" : gm->spellTrapZone[oppIndex][i].name;
                 cout << "[" << i + 1 << "] " << cName << "\n";
             }
             int choice; cout << "Choice: "; cin >> choice;
             if (choice > 0 && choice <= gm->spellTrapZone[oppIndex].size()) targetIdx = choice - 1;
-        } else { // ถ้าบอทเป็นคนร่าย ให้สุ่มทำลาย
+        } else { //ถ้าบอทเป็นคนร่าย 
             targetIdx = rand() % gm->spellTrapZone[oppIndex].size();
         }
 
@@ -64,7 +56,7 @@ int main() {
     Card shieldCrush("Shield Crush", "Spell", 0, 0, 0, "Destroy 1 Defense Position monster opponent controls.");
     shieldCrush.spellEffect = [](GameManager* gm, int casterIndex) {
         int oppIndex = 1 - casterIndex;
-        vector<int> defIndices; // เก็บตำแหน่งมอนสเตอร์ที่ป้องกันอยู่
+        vector<int> defIndices; //เก็บตำแหน่งมอนสเตอร์ที่ป้องกันอยู่
 
         for (int i = 0; i < gm->monsterZone[oppIndex].size(); i++) {
             if (gm->monsterZone[oppIndex][i].status == 2) defIndices.push_back(i);
@@ -75,12 +67,12 @@ int main() {
         }
 
         int chosenIdx = defIndices[0];
-        if (casterIndex == 0) { // เราเป็นคนเลือก
+        if (casterIndex == 0) { //เราเป็นคนเลือก
             cout << "Select Defense monster to destroy:\n";
             for (int i = 0; i < defIndices.size(); i++) cout << "[" << i + 1 << "] Defense Monster\n";
             int choice; cout << "Choice: "; cin >> choice;
             if (choice > 0 && choice <= defIndices.size()) chosenIdx = defIndices[choice - 1];
-        } else { // บอทสุ่มเลือก
+        } else { //บอทสุ่มเลือก
             chosenIdx = defIndices[rand() % defIndices.size()];
         }
 
@@ -104,7 +96,7 @@ int main() {
         }
 
         int targetGyIdx = gyIndices[0];
-        if (casterIndex == 0) { // เราเป็นคนเลือกตัวชุบ
+        if (casterIndex == 0) { //เราเป็นคนเลือกตัวชุบ
             cout << "Select a monster to revive:\n";
             for (int i = 0; i < gyIndices.size(); i++) {
                 Card c = gm->graveyard[casterIndex][gyIndices[i]];
@@ -113,7 +105,7 @@ int main() {
             int choice; cout << "Choice: "; cin >> choice;
             if (choice > 0 && choice <= gyIndices.size()) targetGyIdx = gyIndices[choice - 1];
         } else { 
-            // บอทฉลาด จะเลือกชุบตัวที่ ATK สูงสุดเสมอ
+            //บอทเลือกชุบตัวที่ ATK สูงสุดเสมอ
             int maxAtk = -1;
             for (int idx : gyIndices) {
                 if (gm->graveyard[casterIndex][idx].atk > maxAtk) {
@@ -124,7 +116,7 @@ int main() {
         }
 
         Card revivedCard = gm->graveyard[casterIndex][targetGyIdx];
-        revivedCard.status = 1; // ชุบมาในโหมดโจมตีเสมอ
+        revivedCard.status = 1; //ชุบมาในโหมดโจมตีเสมอ
         gm->monsterZone[casterIndex].push_back(revivedCard);
         gm->graveyard[casterIndex].erase(gm->graveyard[casterIndex].begin() + targetGyIdx);
 
@@ -138,7 +130,7 @@ int main() {
         }
 
         int targetIdx = 0;
-        if (casterIndex == 0) { // เราเลือกตัวที่จะบัฟพลัง
+        if (casterIndex == 0) { //เราเลือกตัวที่จะบัฟ
             cout << "Select a monster to buff (+700 ATK):\n";
             for (int i = 0; i < gm->monsterZone[0].size(); i++) {
                 cout << "[" << i + 1 << "] " << gm->monsterZone[0][i].name << " (ATK: " << gm->monsterZone[0][i].atk << ")\n";
@@ -146,7 +138,7 @@ int main() {
             int choice; cout << "Choice: "; cin >> choice;
             if (choice > 0 && choice <= gm->monsterZone[0].size()) targetIdx = choice - 1;
         } else { 
-            // บอทจะเลือกบัฟพลังให้ตัวที่เก่งที่สุดบนสนาม
+            //บอทจะเลือกบัฟพลังให้ตัวที่เก่งที่สุดบนสนาม
             int maxAtk = -1;
             for (int i = 0; i < gm->monsterZone[1].size(); i++) {
                 if (gm->monsterZone[1][i].atk > maxAtk) { maxAtk = gm->monsterZone[1][i].atk; targetIdx = i; }
@@ -160,7 +152,7 @@ int main() {
     Card darkMagicAttack("Dark Magic Attack", "Spell", 0, 0, 0, "If you control 'Dark Magician', destroy all opponent's Spells and Traps.");
     darkMagicAttack.spellEffect = [](GameManager* gm, int casterIndex) {
         bool hasDM = false;
-        // เช็คว่าบนสนามเรามี Dark Magician ไหม
+        //เช็คว่าบนสนามเรามี Dark Magician ไหม
         for (Card c : gm->monsterZone[casterIndex]) {
             if (c.name == "Dark Magician") { hasDM = true; break; }
         }
@@ -179,7 +171,7 @@ int main() {
     burstStream.spellEffect = [](GameManager* gm, int casterIndex) {
         bool hasBlueEyes = false;
 
-        // เช็คว่าบนสนามเรามี Blue-Eyes White Dragon ไหม
+        //เช็คว่าบนสนามเรามี Blue-Eyes White Dragon ไหม
         for (Card c : gm->monsterZone[casterIndex]) {
             if (c.name == "Blue-Eyes White Dragon") { 
                 hasBlueEyes = true; 
@@ -192,11 +184,11 @@ int main() {
             cout << "\n\033[0;36m[EFFECT] BURST STREAM OF DESTRUCTION!!!\033[0m\n";
             cout << "\033[0;32mAll opponent's monsters are obliterated by the white lightning!\033[0m\n";
 
-            // กวาดมอนสเตอร์ศัตรูลงสุสานทั้งหมด
+            //กวาดมอนสเตอร์ศัตรูลงสุสานทั้งหมด
             for(Card c : gm->monsterZone[oppIndex]) {
                 gm->graveyard[oppIndex].push_back(c);
             }
-            gm->monsterZone[oppIndex].clear(); // ล้างมอนสเตอร์บนสนามศัตรู
+            gm->monsterZone[oppIndex].clear(); //ล้างมอนสเตอร์บนสนามศัตรู
 
         } else {
             cout << "\n\033[31m[!] Effect Failed! You do not control 'Blue-Eyes White Dragon'.\033[0m\n";
@@ -218,24 +210,16 @@ int main() {
         if (gm->monsterZone[oppIndex].empty()) return;
 
         int targetIdx = 0;
-        if (casterIndex == 0) { // เราเลือกว่าจะสะท้อนการโจมตีของตัวไหน
-            cout << "Select the attacking monster to reflect its ATK:\n";
-            for (int i = 0; i < gm->monsterZone[oppIndex].size(); i++) {
-                cout << "[" << i + 1 << "] " << gm->monsterZone[oppIndex][i].name << " (ATK: " << gm->monsterZone[oppIndex][i].atk << ")\n";
-            }
-            int choice; cout << "Choice: "; cin >> choice;
-            if (choice > 0 && choice <= gm->monsterZone[oppIndex].size()) targetIdx = choice - 1;
-        } else { // บอทจะเลือกสะท้อนตัวที่ ATK เยอะสุดของเรา
-            int maxAtk = -1;
-            for (int i = 0; i < gm->monsterZone[oppIndex].size(); i++) {
-                if (gm->monsterZone[oppIndex][i].atk > maxAtk) { maxAtk = gm->monsterZone[oppIndex][i].atk; targetIdx = i; }
-            }
+        if (casterIndex == 0) { 
+            LP[1] -= attacker.atk; 
+            cout << "\033[31mBot takes " << attacker.atk << " damage!\033[0m (Bot LP: " << LP[1] << ")\n";
+        } else { 
+            LP[0] -= attacker.atk; 
+            cout << "\033[31mBot takes " << attacker.atk << " damage!\033[0m (Bot LP: " << LP[1] << ")\n";
         }
 
-        int reflectedDamage = gm->monsterZone[oppIndex][targetIdx].atk;
-        cout << "\n\033[0;35m[TRAP EFFECT] MAGIC CYLINDER! The attack is reflected!\033[0m\n";
-        cout << "\033[31mOpponent takes " << reflectedDamage << " damage!\033[0m\n";
-        gm->LP[oppIndex] -= reflectedDamage; // หักเลือดศัตรู
+        if (LP[1] <= 0 or LP[0] <= 0) return; 
+        continue; 
     };
 
     Card sakuretsuArmor("Sakuretsu Armor", "Trap", 0, 0, 0, "Destroy the attacking monster.");
@@ -259,7 +243,7 @@ int main() {
         }
         cout << "\n\033[0;35m[TRAP EFFECT] SAKURETSU ARMOR! " << gm->monsterZone[oppIndex][targetIdx].name << " is sliced into pieces!\033[0m\n";
 
-        // ย้ายมอนสเตอร์เป้าหมายลงสุสาน
+        //ย้ายมอนสเตอร์เป้าหมายลงสุสาน
         gm->graveyard[oppIndex].push_back(gm->monsterZone[oppIndex][targetIdx]);
         gm->monsterZone[oppIndex].erase(gm->monsterZone[oppIndex].begin() + targetIdx);
     };
@@ -287,7 +271,7 @@ int main() {
         cout << "\n\033[0;35m[TRAP EFFECT] DRAINING SHIELD! The attack energy is absorbed!\033[0m\n";
         cout << "\033[32mYou recover " << healAmount << " LP!\033[0m\n";
 
-        gm->LP[casterIndex] += healAmount; // เพิ่มเลือดให้คนใช้กับดัก
+        gm->LP[casterIndex] += healAmount; //เพิ่มเลือดให้คนใช้กับดัก
     };
 
     Card negateAttack("Negate Attack", "Trap", 0, 0, 0, "Negate the opponent's attack.");
@@ -315,7 +299,7 @@ int main() {
             }
         }
 
-        // หักพลังโจมตีลง 700 (ไม่ให้ติดลบ)
+        //หักพลังโจมตีลง 700 (ไม่ให้ติดลบ)
         gm->monsterZone[oppIndex][targetIdx].atk -= 700;
         if (gm->monsterZone[oppIndex][targetIdx].atk < 0) gm->monsterZone[oppIndex][targetIdx].atk = 0;
 
@@ -338,7 +322,7 @@ int main() {
             int choice; cout << "Choice: "; cin >> choice;
             if (choice > 0 && choice <= gm->monsterZone[0].size()) targetIdx = choice - 1;
         } else {
-            // บอทจะเลือกป้องกันให้ตัวที่มี DEF สูงสุด
+            //บอทจะเลือกป้องกันให้ตัวที่มี DEF สูงสุด
             int maxDef = -1;
             for (int i = 0; i < gm->monsterZone[1].size(); i++) {
                 if (gm->monsterZone[1][i].def > maxDef) { maxDef = gm->monsterZone[1][i].def; targetIdx = i; }
@@ -351,9 +335,9 @@ int main() {
     };
 
     //Deck 1
+@@ -33,27 +367,33 @@ int main() {
     vector<Card> deck1 = {
         Card("Beaver Warrior", "Monster", 4, 1200, 1500, "\"A beaver that is skilled in combat.\""),
-@@ -33,27 +367,33 @@ int main() {
         Card("Dark Magician", "Monster", 7, 2500, 2100, "\"The ultimate wizard in terms of attack and defense.\""),
         Card("Feral Imp", "Monster", 4, 1300, 1400, "\"A playful little fiend that lurks in the dark.\""),
         Card("Gaia The Fierce Knight", "Monster", 7, 2300, 2100, "\"A knight whose horse travels faster than wind.\""),
