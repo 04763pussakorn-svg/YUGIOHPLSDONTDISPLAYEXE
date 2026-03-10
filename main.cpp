@@ -434,6 +434,7 @@ int main() {
 
     GameManager game;
     int urDeck;
+while (urDeck != 1 && urDeck != 2) {
     cout << "Select Your Deck!   <Bot will select the another Deck>\n[1] Dark Magician\n[2] Blue Eyes White Dragon" << endl;
     cin >> urDeck;
     if(urDeck == 1) {
@@ -442,7 +443,8 @@ int main() {
     else if(urDeck == 2) {
         cout << "You Selected Blue Eyes White Dragon Deck!\n";
         game.setDecks(deck2, deck1);}
-    
+    }
+
     game.startDuel();
 //Muhahaha
     return 0;
