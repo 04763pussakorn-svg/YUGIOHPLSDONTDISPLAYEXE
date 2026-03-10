@@ -435,13 +435,13 @@ int main() {
     GameManager game;
     int urDeck;
 while (urDeck != 1 && urDeck != 2) {
-    cout << "Select Your Deck!   <Bot will select the another Deck>\n[1] Dark Magician\n[2] Blue Eyes White Dragon" << endl;
+    cout << "Select Your Deck!   <Bot will select the another Deck>\n[1] Yugi's Deck\n[2] Kaiba's Deck" << endl;
     cin >> urDeck;
     if(urDeck == 1) {
-        cout << "You Selected Dark Magician Deck!\n";
+        cout << "You Selected Yugi's Deck!\n";
         game.setDecks(deck1, deck2);}
     else if(urDeck == 2) {
-        cout << "You Selected Blue Eyes White Dragon Deck!\n";
+        cout << "You Selected Kaiba's Deck!\n";
         game.setDecks(deck2, deck1);}
     }
 

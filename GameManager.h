@@ -144,7 +144,7 @@ private:
 
 private:
     void playTurn(int playerIndex) {
-        if (playerIndex == 0) cout << "\n--- Player 1's Turn --- (Turn " << turnCount << ")\n";
+        if (playerIndex == 0) cout << "\n--- Player's Turn --- (Turn " << turnCount << ")\n";
         else cout << "\n--- Bot's Turn --- (Turn " << turnCount << ")\n";
 
         if(turnCount >= 2) drawPhase(playerIndex);
